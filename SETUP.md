@@ -8,7 +8,7 @@
 1. **tmux**: `~/.tmux.conf` + scripts de status bar (dir corto + git branch) con tema
    Catppuccin Mocha, vía TPM.
 2. **Claude Code (nivel usuario)**: `statusline.sh`, `hooks/`, y prefs portables
-   mergeadas en `~/.claude/settings.json` (incluye **modo auto** = `permissions.defaultMode: acceptEdits`).
+   mergeadas en `~/.claude/settings.json` (incluye **modo auto** = `permissions.defaultMode: auto`).
 3. **Skills** (opcional, **por-proyecto**): se copian dentro del `.claude/skills/`
    del proyecto que el usuario indique.
 

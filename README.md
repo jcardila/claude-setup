@@ -30,9 +30,11 @@ Y Claude hace el resto. (Ver [`SETUP.md`](SETUP.md), escrito para que un agente 
 
 ## Modo auto
 
-Las prefs incluyen `permissions.defaultMode: "acceptEdits"` → Claude arranca en
-modo auto (auto-acepta ediciones sin pedir confirmación). Es el mismo modo que
-se activa manualmente con `Shift+Tab`.
+Las prefs incluyen `permissions.defaultMode: "auto"` → Claude arranca en **modo
+auto**, el modo que se cicla con `Shift+Tab`. Es distinto de `acceptEdits` (ese
+solo auto-acepta ediciones de archivo); `auto` es el modo automático amplio.
+Valores válidos de `defaultMode` en Claude Code 2.1.x: `default`, `acceptEdits`,
+`auto`, `plan`, `bypassPermissions`.
 
 ## Actualizar el setup en todos los servers
 
