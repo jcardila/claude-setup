@@ -1,0 +1,17 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "padding": 1
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits"
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": true
+  },
+  "language": "Español",
+  "effortLevel": "high",
+  "agentPushNotifEnabled": true,
+  "tui": "fullscreen"
+}

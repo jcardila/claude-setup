@@ -1,0 +1,13 @@
+# Nunca versionar secretos ni estado local
+*.bak-*
+.credentials.json
+settings.local.json
+settings.json
+history.jsonl
+*.log
+
+# Estado de runtime de Claude (por si alguien copia dirs de más)
+sessions/
+tasks/
+telemetry/
+shell-snapshots/
