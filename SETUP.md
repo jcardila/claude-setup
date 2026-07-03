@@ -9,6 +9,8 @@
    Catppuccin Mocha, vía TPM.
 2. **Claude Code (nivel usuario)**: `statusline.sh`, `hooks/`, y prefs portables
    mergeadas en `~/.claude/settings.json` (incluye **modo auto** = `permissions.defaultMode: auto`).
+   También agrega el marketplace `anthropics/claude-plugins-official` e instala/habilita
+   el plugin **`frontend-design@claude-plugins-official`** a nivel usuario.
 3. **Skills** (opcional, **por-proyecto**): se copian dentro del `.claude/skills/`
    del proyecto que el usuario indique.
 

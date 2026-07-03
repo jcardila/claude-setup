@@ -74,6 +74,29 @@ else
   info "settings.json creado"
 fi
 
+# ---------------------------------------------------------------------------
+step "Plugin frontend-design (marketplace claude-plugins-official)"
+PLUGIN="frontend-design@claude-plugins-official"
+if command -v claude >/dev/null 2>&1; then
+  # 1) marketplace (idempotente: si ya está, no falla)
+  claude plugin marketplace add anthropics/claude-plugins-official >/dev/null 2>&1 || true
+  # 2) instalar a nivel usuario si aún no está
+  if claude plugin list 2>/dev/null | grep -q "$PLUGIN"; then
+    info "$PLUGIN ya instalado"
+  elif claude plugin install "$PLUGIN" --scope user >/dev/null 2>&1; then
+    info "$PLUGIN instalado"
+  else
+    warn "no se pudo instalar automáticamente. Instalá con:"
+    warn "  claude plugin marketplace add anthropics/claude-plugins-official"
+    warn "  claude plugin install $PLUGIN --scope user"
+  fi
+  # 3) habilitar (el settings.json ya lo declara; esto lo fuerza por si estaba disabled)
+  claude plugin enable "$PLUGIN" >/dev/null 2>&1 || true
+else
+  warn "claude CLI no encontrado; instalá el plugin luego con:"
+  warn "  claude plugin install $PLUGIN --scope user"
+fi
+
 step "Listo"
 echo "  • Recargá tmux:  tmux source-file ~/.tmux.conf   (o Ctrl+b R)"
 echo "  • Instalá catppuccin en tmux: Ctrl+b I"
