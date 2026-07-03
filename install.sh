@@ -34,7 +34,7 @@ for bin in tmux git jq sed; do
   command -v "$bin" >/dev/null 2>&1 || missing+=("$bin")
 done
 if [ "${#missing[@]}" -gt 0 ]; then
-  warn "faltan: ${missing[*]} — instalá con: sudo apt install ${missing[*]}"
+  warn "faltan: ${missing[*]} — instala con: sudo apt install ${missing[*]}"
 else
   info "tmux, git, jq, sed presentes"
 fi
@@ -52,7 +52,7 @@ else
   git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
   info "TPM clonado"
 fi
-warn "Dentro de tmux, presioná  Ctrl+b  luego  I  (mayúscula) para instalar catppuccin."
+warn "Dentro de tmux, presiona  Ctrl+b  luego  I  (mayúscula) para instalar catppuccin."
 
 # ---------------------------------------------------------------------------
 step "Claude Code"
@@ -86,19 +86,19 @@ if command -v claude >/dev/null 2>&1; then
   elif claude plugin install "$PLUGIN" --scope user >/dev/null 2>&1; then
     info "$PLUGIN instalado"
   else
-    warn "no se pudo instalar automáticamente. Instalá con:"
+    warn "no se pudo instalar automáticamente. Instala con:"
     warn "  claude plugin marketplace add anthropics/claude-plugins-official"
     warn "  claude plugin install $PLUGIN --scope user"
   fi
   # 3) habilitar (el settings.json ya lo declara; esto lo fuerza por si estaba disabled)
   claude plugin enable "$PLUGIN" >/dev/null 2>&1 || true
 else
-  warn "claude CLI no encontrado; instalá el plugin luego con:"
+  warn "claude CLI no encontrado; instala el plugin luego con:"
   warn "  claude plugin install $PLUGIN --scope user"
 fi
 
 step "Listo"
-echo "  • Recargá tmux:  tmux source-file ~/.tmux.conf   (o Ctrl+b R)"
-echo "  • Instalá catppuccin en tmux: Ctrl+b I"
+echo "  • Recarga tmux:  tmux source-file ~/.tmux.conf   (o Ctrl+b R)"
+echo "  • Instala catppuccin en tmux: Ctrl+b I"
 echo "  • La statusline de Claude aparece al abrir 'claude'."
 echo "  • Skills (por-proyecto):  ./install-skills.sh /ruta/al/proyecto"
