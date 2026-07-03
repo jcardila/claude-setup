@@ -25,7 +25,7 @@ Y Claude hace el resto. (Ver [`SETUP.md`](SETUP.md), escrito para que un agente 
 | **tmux** | `tmux/tmux.conf`, `tmux/scripts/*` | Catppuccin Mocha, status bar arriba, git branch + dir corto. Requiere TPM (lo instala `install.sh`). |
 | **statusline Claude** | `claude/statusline.sh` | Modelo · directorio · barra de contexto con colores Catppuccin. Deps: `jq`, `git`, `sed`. |
 | **hooks Claude** | `claude/hooks/*` | `needs-attention.sh`, `task-done.sh`. |
-| **prefs Claude** | `claude/settings.portable.json` | Idioma ES, effort alto, plugin frontend-design, **modo auto** (`defaultMode: acceptEdits`). Se **mergea** sin pisar permisos locales. |
+| **prefs Claude** | `claude/settings.portable.json` | Idioma ES, effort alto, plugin frontend-design, **modo auto** (`defaultMode: auto`). Se **mergea** sin pisar permisos locales. |
 | **skills** | `claude/skills/*` | **Por-proyecto** — instalar con `install-skills.sh <proyecto>`. |
 
 ## Modo auto
