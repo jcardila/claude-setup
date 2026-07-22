@@ -206,7 +206,9 @@ if [ "${ADDED:-0}" -gt 0 ] || [ "${REMOVED:-0}" -gt 0 ]; then
 fi
 
 # Costo estimado (dim)
-COST_FMT=$(printf '%.2f' "$COST" 2>/dev/null || echo "0.00")
+# LC_NUMERIC=C: en locales con coma decimal (es_CO, es_ES...) printf rechaza "0.42"
+# como número inválido y la statusline mostraba basura tipo "$0,000.00".
+COST_FMT=$(LC_NUMERIC=C printf '%.2f' "$COST" 2>/dev/null || echo "0.00")
 [ "$COST_FMT" != "0.00" ] && LINE2="${LINE2} ${SEP} ${DIM}\$${COST_FMT}${RESET}"
 
 echo -e "$LINE1"
