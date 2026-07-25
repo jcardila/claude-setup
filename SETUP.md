@@ -8,7 +8,9 @@
 1. **tmux**: `~/.tmux.conf` + scripts de status bar (dir corto + git branch) con tema
    Catppuccin Mocha, vía TPM.
 2. **Claude Code (nivel usuario)**: `statusline.sh`, `hooks/`, y prefs portables
-   mergeadas en `~/.claude/settings.json` (incluye **modo auto** = `permissions.defaultMode: auto`).
+   mergeadas en `~/.claude/settings.json` (incluye **modo auto** = `permissions.defaultMode: auto`,
+   **Remote Control automático** = `remoteControlAtStartup: true`, y **sin cambio
+   automático de modelo cuando los safeguards marcan un mensaje** = `switchModelsOnFlag: false`).
    También agrega el marketplace `anthropics/claude-plugins-official` e instala/habilita
    el plugin **`frontend-design@claude-plugins-official`** a nivel usuario.
 3. **Skills** (opcional, **por-proyecto**): se copian dentro del `.claude/skills/`
@@ -48,6 +50,14 @@ bash install-skills.sh /ruta/al/proyecto
 - Abre `claude`: la statusline (modelo · dir · barra de contexto) debe aparecer,
   y debe arrancar en **modo auto** (automático).
 - `tmux` debe mostrar la status bar arriba con git branch + dir + sesión.
+- `jq '{remoteControlAtStartup, switchModelsOnFlag}' ~/.claude/settings.json`
+  debe dar `true` y `false` respectivamente. En `/config` se ven como
+  *"Enable Remote Control for all sessions"* y *"Switch models when a message is flagged"*.
+- Si Remote Control no arranca: `claude remote-control` imprime un checklist
+  (política de la org `disableRemoteControl`, login de claude.ai, suscripción,
+  scopes). Ojo también con un `remoteControlAtStartup:false` en el
+  `.claude/settings.json` del proyecto o en un `settings.local.json` — esos
+  scopes ganan sobre el nivel usuario. `install.sh` lo avisa.
 
 ## Lo que este repo NO toca (a propósito)
 - `~/.claude/settings.local.json` — permisos específicos de cada máquina.

@@ -75,6 +75,38 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+step "Remote Control + fallback por safeguards"
+
+# lee una clave booleana sin que jq confunda `false` con "ausente" (`//` lo hace)
+getbool() { jq -r --arg k "$2" 'if has($k) then (.[$k]|tostring) else "unset" end' "$1"; }
+
+# 1) Remote Control automático en cada sesión (remoteControlAtStartup: true).
+#    settings.json (userSettings) gana sobre el valor del /config (~/.claude.json),
+#    PERO un settings.json de proyecto o un settings.local.json con
+#    remoteControlAtStartup:false lo apagan igual. Avisamos si eso pasa aquí.
+rc_val=$(getbool "$SETTINGS" remoteControlAtStartup)
+[ "$rc_val" = "true" ] && info "remoteControlAtStartup=true (RC arranca solo en cada sesión)" \
+                       || warn "remoteControlAtStartup=$rc_val — revisa $SETTINGS"
+
+for f in "$CLAUDE_DIR/settings.local.json" "$PWD/.claude/settings.json" "$PWD/.claude/settings.local.json"; do
+  if [ -f "$f" ] && [ "$(getbool "$f" remoteControlAtStartup)" = "false" ]; then
+    warn "$f pone remoteControlAtStartup:false y ese scope tiene prioridad — quítalo"
+  fi
+done
+
+# managed settings de la org: kill-switch que gana sobre todo
+for f in /etc/claude-code/managed-settings.json "/Library/Application Support/ClaudeCode/managed-settings.json"; do
+  if [ -f "$f" ] && [ "$(getbool "$f" disableRemoteControl)" = "true" ]; then
+    warn "política de la org: disableRemoteControl:true en $f — Remote Control no podrá arrancar"
+  fi
+done
+
+# 2) Nada de auto-cambio de modelo cuando los safeguards marcan un mensaje.
+sm_val=$(getbool "$SETTINGS" switchModelsOnFlag)
+[ "$sm_val" = "false" ] && info "switchModelsOnFlag=false (la sesión pausa y pregunta; no cambia de modelo sola)" \
+                        || warn "switchModelsOnFlag=$sm_val — revisa $SETTINGS"
+
+# ---------------------------------------------------------------------------
 step "Plugin frontend-design (marketplace claude-plugins-official)"
 PLUGIN="frontend-design@claude-plugins-official"
 if command -v claude >/dev/null 2>&1; then
