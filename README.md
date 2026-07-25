@@ -25,7 +25,7 @@ Y Claude hace el resto. (Ver [`SETUP.md`](SETUP.md), escrito para que un agente 
 | **tmux** | `tmux/tmux.conf`, `tmux/scripts/*` | Catppuccin Mocha, status bar arriba, git branch + dir corto. Requiere TPM (lo instala `install.sh`). |
 | **statusline Claude** | `claude/statusline.sh` | 2 líneas: identidad (tmux · modelo · effort · cuenta · dir · git) + métricas en vivo (contexto · límites · líneas · costo). Catppuccin Mocha. Ver [Statusline](#statusline). Deps: `jq`, `git`, coreutils. |
 | **hooks Claude** | `claude/hooks/*` | `needs-attention.sh`, `task-done.sh`. |
-| **prefs Claude** | `claude/settings.portable.json` | Idioma ES, effort alto, **modo auto** (`defaultMode: auto`). Se **mergea** sin pisar permisos locales. |
+| **prefs Claude** | `claude/settings.portable.json` | Idioma ES, effort alto, **modo auto** (`defaultMode: auto`), **Remote Control al arranque** y **sin fallback automático de modelo**. Se **mergea** sin pisar permisos locales. |
 | **plugin frontend-design** | (vía `install.sh`) | Marketplace `anthropics/claude-plugins-official` + `frontend-design@claude-plugins-official`, instalado a nivel usuario y habilitado. |
 | **skills** | `claude/skills/*` | **Por-proyecto** — instalar con `install-skills.sh <proyecto>`. |
 
@@ -69,6 +69,57 @@ auto**, el modo que se cicla con `Shift+Tab`. Es distinto de `acceptEdits` (ese
 solo auto-acepta ediciones de archivo); `auto` es el modo automático amplio.
 Valores válidos de `defaultMode` en Claude Code 2.1.x: `default`, `acceptEdits`,
 `auto`, `plan`, `bypassPermissions`.
+
+## Remote Control siempre encendido
+
+```json
+"remoteControlAtStartup": true
+```
+
+Es el mismo toggle que en `/config` aparece como **"Enable Remote Control for
+all sessions"**. Con `true`, cada sesión levanta el bridge de Remote Control al
+arrancar (lo que te deja retomarla desde `claude.ai/code` o el móvil) sin tener
+que correr `claude --remote-control` / `/remote-control` a mano.
+
+**Precedencia** (de mayor a menor), útil si alguna máquina no lo activa:
+
+1. `disableRemoteControl: true` en los *managed settings* de la organización
+   (`/etc/claude-code/managed-settings.json`) → apaga Remote Control por
+   completo, gana sobre todo lo demás.
+2. `remoteControlAtStartup: false` en `.claude/settings.json` del **proyecto** o
+   en cualquier `settings.local.json` → apaga, gana sobre el nivel usuario.
+3. Políticas / flags de la org.
+4. **`~/.claude/settings.json`** ← aquí es donde lo pone este repo.
+5. `~/.claude.json` (lo que escribe el `/config` interactivo).
+
+`install.sh` avisa si detecta un `false` en (1) o (2).
+
+Requisitos: sesión con login de **claude.ai** (suscripción activa). Con auth por
+`ANTHROPIC_API_KEY` el bridge no arranca. Para diagnosticar: `claude
+remote-control` imprime un checklist (API alcanzable, política de la org, login,
+suscripción, scopes).
+
+## Sin fallback de modelo cuando los safeguards marcan algo
+
+```json
+"switchModelsOnFlag": false
+```
+
+En `/config` es **"Switch models when a message is flagged"** (sección *Model &
+output*), y viene en `true` por defecto. Con el default, si los safeguards marcan
+un mensaje —por ejemplo trabajando con Fable 5— Claude Code **cambia solo a otro
+modelo** para seguir la conversación. Con `false` no hay cambio silencioso: la
+sesión **pausa y pregunta**, y tú decides.
+
+Kill-switches equivalentes por entorno, por si los quieres en un server puntual:
+
+| Variable | Efecto |
+|---|---|
+| `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1` | Apaga el mecanismo entero (ni siquiera ofrece el cambio). Más duro que el setting. |
+| `CLAUDE_CODE_NO_MODEL_FALLBACK=1` | Prohíbe **cualquier** sustitución de modelo, incluida la de compactación. Puede hacer fallar `/compact` si tu política de modelos solo permite Fable 5. |
+
+Este repo usa el setting (`switchModelsOnFlag: false`) y no las env vars: mantiene
+el diálogo de consentimiento en vez de romper la sesión.
 
 ## Actualizar el setup en todos los servers
 

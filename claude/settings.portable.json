@@ -13,5 +13,7 @@
   "language": "Español",
   "effortLevel": "high",
   "agentPushNotifEnabled": true,
+  "remoteControlAtStartup": true,
+  "switchModelsOnFlag": false,
   "tui": "fullscreen"
 }
