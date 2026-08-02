@@ -15,5 +15,6 @@
   "agentPushNotifEnabled": true,
   "remoteControlAtStartup": true,
   "switchModelsOnFlag": false,
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "cleanupPeriodDays": 365
 }

@@ -9,8 +9,12 @@
    Catppuccin Mocha, vía TPM.
 2. **Claude Code (nivel usuario)**: `statusline.sh`, `hooks/`, y prefs portables
    mergeadas en `~/.claude/settings.json` (incluye **modo auto** = `permissions.defaultMode: auto`,
-   **Remote Control automático** = `remoteControlAtStartup: true`, y **sin cambio
-   automático de modelo cuando los safeguards marcan un mensaje** = `switchModelsOnFlag: false`).
+   **Remote Control automático** = `remoteControlAtStartup: true`, **sin cambio
+   automático de modelo cuando los safeguards marcan un mensaje** = `switchModelsOnFlag: false`,
+   y **retención de historial de conversaciones a 365 días** = `cleanupPeriodDays: 365`
+   (el default de Claude Code es 30 días: borra los transcripts `.jsonl` de
+   `~/.claude/projects/` más viejos que eso al arrancar, lo que hace que `claude --resume`
+   pierda conversaciones antiguas).
    También agrega el marketplace `anthropics/claude-plugins-official` e instala/habilita
    el plugin **`frontend-design@claude-plugins-official`** a nivel usuario.
 3. **Skills** (opcional, **por-proyecto**): se copian dentro del `.claude/skills/`
@@ -50,8 +54,8 @@ bash install-skills.sh /ruta/al/proyecto
 - Abre `claude`: la statusline (modelo · dir · barra de contexto) debe aparecer,
   y debe arrancar en **modo auto** (automático).
 - `tmux` debe mostrar la status bar arriba con git branch + dir + sesión.
-- `jq '{remoteControlAtStartup, switchModelsOnFlag}' ~/.claude/settings.json`
-  debe dar `true` y `false` respectivamente. En `/config` se ven como
+- `jq '{remoteControlAtStartup, switchModelsOnFlag, cleanupPeriodDays}' ~/.claude/settings.json`
+  debe dar `true`, `false` y `365` respectivamente. Los dos primeros se ven en `/config` como
   *"Enable Remote Control for all sessions"* y *"Switch models when a message is flagged"*.
 - Si Remote Control no arranca: `claude remote-control` imprime un checklist
   (política de la org `disableRemoteControl`, login de claude.ai, suscripción,
